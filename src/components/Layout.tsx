@@ -1,5 +1,4 @@
 import { Outlet, Link } from "react-router-dom";
-
 const Layout = (): JSX.Element => {
   return (
     <>
@@ -9,10 +8,19 @@ const Layout = (): JSX.Element => {
             <Link to="/">Home</Link>
           </li>
           <li>
-            <Link to="/blogs">Blogs</Link>
+            <Link to="/UserList">UserList</Link>
           </li>
           <li>
-            <Link to="/contact">Contact</Link>
+            <Link to="/SendMessage">SendMessage</Link>
+          </li>
+          <li>
+            <Link to="/SendItem">SendItem</Link>
+          </li>
+          <li>
+            <Link to="/ManageReviews">ManageReviews</Link>
+          </li>
+          <li>
+            <Link to="/AuditeLog">AuditeLog</Link>
           </li>
         </ul>
       </nav>

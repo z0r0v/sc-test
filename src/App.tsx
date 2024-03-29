@@ -19,11 +19,11 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Layout />}>
-              <Route index element={<SendMessage />} />
-              <Route index element={<SendItem />} />
-              <Route index element={<ManageReviews />} />
-              <Route index element={<UserList />} />
-              <Route index element={<AuditeLog />} />
+              <Route path="SendMessage" index element={<SendMessage />} />
+              <Route path="SendItem" index element={<SendItem />} />
+              <Route path="ManageReviews" index element={<ManageReviews />} />
+              <Route path="UserList" index element={<UserList />} />
+              <Route path="AuditeLog" index element={<AuditeLog />} />
             </Route>
           </Routes>
         </BrowserRouter>
