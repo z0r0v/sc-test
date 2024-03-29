@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 import React from "react";
 import {
   Box,
-  Button, Container,
+  Button,
   Divider,
   Drawer, Grid,
   Link,
@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { PageItem } from "../App";
 import MenuIcon from '@mui/icons-material/Menu';
+import Login from "./login/index";
 
 type State = {
   isOpen: boolean;
@@ -27,8 +28,6 @@ export default class Layout extends React.Component<IProps> {
   state: State = {
     isOpen: false,
   };
-
-  private locationsName = window.location.pathname;
 
   private toggleDrawer = (): void => {
     this.setState({ isOpen: !this.state.isOpen });
@@ -47,12 +46,12 @@ export default class Layout extends React.Component<IProps> {
           {this.props.pages.map((item, index) => {
             const { name, icon, href } = item;
             return (
-              <ListItem key={index} disablePadding>
+              <ListItem key={index} disablePadding selected={window.location.pathname.slice(1) === href}>
                 <Link
+                  width={'100%'}
                   href={href}
-                  // TODO: style to file style
-                  style={{ textDecoration: "none", color: "unset" }}
-                  width={"100%"}
+                  underline="none"
+                  color="inherit"
                 >
                   <ListItemButton>
                     <ListItemIcon>{icon}</ListItemIcon>
@@ -71,6 +70,7 @@ export default class Layout extends React.Component<IProps> {
   render() {
     return (
         <Box>
+          <Login/>
           <Grid
             container
             direction="row"

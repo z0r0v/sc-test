@@ -3,13 +3,13 @@
     "user": {
       "id": "01",
       "type": "us",
-      "login": "User",
+      "email": "User",
       "password": 123
     },
     "editor": {
       "id": "02",
       "type": "ed",
-      "login": "Editor",
+      "email": "Editor",
       "password": 321
     }
   }

@@ -25,26 +25,26 @@ function App() {
     {
       name: "User's list",
       icon: <Person />,
-      href: "SendMessage",
-      component: <SendMessage />,
+      href: "UserList",
+      component: <UserList />,
     },
     {
       name: "Message's",
       icon: <MailIcon />,
-      href: "SendItem",
-      component: <SendItem />,
+      href: "SendMessage",
+      component: <SendMessage />,
     },
     {
       name: "Item 's",
       icon: <HomeRepairServiceIcon />,
-      href: "ManageReviews",
-      component: <ManageReviews />,
+      href: "SendItem",
+      component: <SendItem />,
     },
     {
       name: "Review's",
       icon: <RemoveRedEyeIcon />,
-      href: "AuditeLog",
-      component: <UserList />,
+      href: "ManageReviews",
+      component:<ManageReviews /> ,
     },
     {
       name: "Audite Log's",
@@ -55,7 +55,6 @@ function App() {
   ];
 
   return (
-
     <div className="App">
       <header className="App-header">
       </header>
