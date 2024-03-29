@@ -1,0 +1,16 @@
+{
+  "users": {
+    "user": {
+      "id": "01",
+      "type": "us",
+      "login": "User",
+      "password": 123
+    },
+    "editor": {
+      "id": "02",
+      "type": "ed",
+      "login": "Editor",
+      "password": 321
+    }
+  }
+}
