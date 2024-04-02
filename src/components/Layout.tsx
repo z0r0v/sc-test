@@ -3,8 +3,10 @@ import React from "react";
 import {
   Box,
   Button,
+  Container,
   Divider,
-  Drawer, Grid,
+  Drawer,
+  Grid,
   Link,
   List,
   ListItem,
@@ -13,8 +15,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import { PageItem } from "../App";
-import MenuIcon from '@mui/icons-material/Menu';
-import Login from "./login/index";
+import MenuIcon from "@mui/icons-material/Menu";
 
 type State = {
   isOpen: boolean;
@@ -46,9 +47,13 @@ export default class Layout extends React.Component<IProps> {
           {this.props.pages.map((item, index) => {
             const { name, icon, href } = item;
             return (
-              <ListItem key={index} disablePadding selected={window.location.pathname.slice(1) === href}>
+              <ListItem
+                key={index}
+                disablePadding
+                selected={window.location.pathname.slice(1) === href}
+              >
                 <Link
-                  width={'100%'}
+                  width={"100%"}
                   href={href}
                   underline="none"
                   color="inherit"
@@ -67,10 +72,10 @@ export default class Layout extends React.Component<IProps> {
     );
   };
 
-  render() {
+  render(): JSX.Element {
     return (
-        <Box>
-          <Login/>
+      <Box sx={{ border: "2px solid grey" }}>
+        <Container sx={{ border: "2px solid grey" }}>
           <Grid
             container
             direction="row"
@@ -82,19 +87,23 @@ export default class Layout extends React.Component<IProps> {
                 this.toggleDrawer();
               }}
             >
-              <MenuIcon/>
+              <MenuIcon />
             </Button>
           </Grid>
-          <Drawer  anchor={'right'}
-                   open={this.state.isOpen}
-                   onClose={() => {
-                     this.toggleDrawer();
-                   }}
+        </Container>
+        <Container>
+          <Drawer
+            anchor={"right"}
+            open={this.state.isOpen}
+            onClose={() => {
+              this.toggleDrawer();
+            }}
           >
             {this.DrawerList()}
           </Drawer>
           <Outlet />
-        </Box>
+        </Container>
+      </Box>
     );
   }
 }
