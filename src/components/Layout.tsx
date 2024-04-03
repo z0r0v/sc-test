@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import { PageItem } from "../App";
 import MenuIcon from "@mui/icons-material/Menu";
+import appContext from "../lib/AppContext";
 
 type State = {
   isOpen: boolean;
@@ -48,6 +49,7 @@ export default class Layout extends React.Component<IProps> {
             const { name, icon, href } = item;
             return (
               <ListItem
+                disabled={true}
                 key={index}
                 disablePadding
                 selected={window.location.pathname.slice(1) === href}
@@ -74,23 +76,25 @@ export default class Layout extends React.Component<IProps> {
 
   render(): JSX.Element {
     return (
-      <Box sx={{ border: "2px solid grey" }}>
-        <Container sx={{ border: "2px solid grey" }}>
-          <Grid
-            container
-            direction="row"
-            justifyContent="flex-end"
-            alignItems="center"
-          >
-            <Button
-              onClick={() => {
-                this.toggleDrawer();
-              }}
+      <Box>
+        {appContext.auth?.isLogin() ? (
+          <Container sx={{ border: "2px solid grey" }}>
+            <Grid
+              container
+              direction="row"
+              justifyContent="flex-end"
+              alignItems="center"
             >
-              <MenuIcon />
-            </Button>
-          </Grid>
-        </Container>
+              <Button
+                onClick={() => {
+                  this.toggleDrawer();
+                }}
+              >
+                <MenuIcon />
+              </Button>
+            </Grid>
+          </Container>
+        ) : null}
         <Container>
           <Drawer
             anchor={"right"}

@@ -49,7 +49,7 @@ export default class User {
 
   public async setAllAttributes(user: Data) {
     this.data = user;
-    await this.setUserToStorage();
+    this.setUserToStorage();
   }
 
   public init() {
@@ -57,9 +57,9 @@ export default class User {
     if (userJson !== null) {
       const user = JSON.parse(this.getUserFromStorage());
       this.setAllAttributes(user);
-      return true
+      return true;
     }
-    return false
+    return false;
   }
   private setToStorage(key: string, data: string) {
     localStorage.setItem(key, data);

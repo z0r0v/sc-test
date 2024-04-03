@@ -10,13 +10,14 @@ import AuditeLog from "./components/pages/AuditeLog/AuditeLog";
 import { Person } from "@mui/icons-material";
 import MailIcon from "@mui/icons-material/Mail";
 import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
 import HomeRepairServiceIcon from "@mui/icons-material/HomeRepairService";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import Box from "@mui/material/Box";
 import Login from "./components/login";
 import Auth from "./lib/auth";
-import appContext from './lib/AppContext';
+import appContext from "./lib/AppContext";
 
 export type PageItem = {
   name: string;
@@ -25,9 +26,8 @@ export type PageItem = {
   component: JSX.Element;
 };
 
-
-export default class App extends React.Component <any, any>{
-   pages: PageItem[] = [
+export default class App extends React.Component<any, any> {
+  pages: PageItem[] = [
     {
       name: "User's list",
       icon: <Person />,
@@ -59,34 +59,17 @@ export default class App extends React.Component <any, any>{
       component: <AuditeLog />,
     },
     {
-      name: "Login",
-      icon: <LoginIcon />,
+      name: appContext.auth?.isLogin() ? "Log Out" : "Login",
+      icon: appContext.auth?.isLogin() ? <LogoutIcon /> : <LoginIcon />,
       href: "/",
       component: <Login />,
     },
   ];
 
-   private constructor(props: any) {
-     super(props);
-     appContext.auth = new Auth();
-   }
-
-   getPath = () => {
-    if(appContext === null ||
-      appContext.auth == null ||
-      appContext.auth.getUser().type === null) {
-        return '/'
-    }
-
-    if(appContext.auth.getUser().type === 'us') {
-      return 'SendMessage'
-    }
-
-    if(appContext.auth.getUser().type === 'ed') {
-      return 'ManageReviews'
-    }
-
-    return '/'
+  private constructor(props: any) {
+    super(props);
+    appContext.auth = new Auth();
+    appContext.auth.signIn();
   }
 
   render() {
@@ -96,7 +79,10 @@ export default class App extends React.Component <any, any>{
         <Box>
           <BrowserRouter>
             <Routes>
-              <Route path={this.getPath()} element={<Layout pages={this.pages as PageItem[]} />}>
+              <Route
+                path={"/"}
+                element={<Layout pages={this.pages as PageItem[]} />}
+              >
                 {this.pages.map((page, index) => {
                   const { href, component } = page;
                   return (
@@ -111,4 +97,3 @@ export default class App extends React.Component <any, any>{
     );
   }
 }
-
