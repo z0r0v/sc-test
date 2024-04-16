@@ -18,6 +18,10 @@
 
 `nvm use v16.14.2`
 
+### Install dependencies
+
+`npm install`
+
 ### Format all files with Prettier:
 
 `npx prettier . --write`
