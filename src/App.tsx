@@ -24,45 +24,53 @@ export type PageItem = {
   icon: JSX.Element;
   href: string;
   component: JSX.Element;
+  availability: boolean;
 };
 
 export default class App extends React.Component<any, any> {
+  // TODO: change lokation to new ts file
   pages: PageItem[] = [
     {
       name: "User's list",
       icon: <Person />,
       href: "UserList",
       component: <UserList />,
+      availability: false,
     },
     {
       name: "Message's",
       icon: <MailIcon />,
       href: "SendMessage",
       component: <SendMessage />,
+      availability: true,
     },
     {
       name: "Item 's",
       icon: <HomeRepairServiceIcon />,
       href: "SendItem",
       component: <SendItem />,
+      availability: true,
     },
     {
       name: "Review's",
       icon: <RemoveRedEyeIcon />,
       href: "ManageReviews",
       component: <ManageReviews />,
+      availability: false,
     },
     {
       name: "Audite Log's",
       icon: <ListAltIcon />,
       href: "AuditeLog",
       component: <AuditeLog />,
+      availability: true,
     },
     {
       name: appContext.auth?.isLogin() ? "Log Out" : "Login",
       icon: appContext.auth?.isLogin() ? <LogoutIcon /> : <LoginIcon />,
       href: "/",
       component: <Login />,
+      availability: true,
     },
   ];
 

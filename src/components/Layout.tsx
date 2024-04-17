@@ -27,9 +27,19 @@ interface IProps {
 }
 
 export default class Layout extends React.Component<IProps> {
+  constructor(props: IProps) {
+    super(props);
+    this.pages =
+      appContext.auth?.getUser().type === "ed"
+        ? this.props.pages
+        : this.props.pages.filter((item) => item.availability === true);
+  }
+
   state: State = {
     isOpen: false,
   };
+
+  private pages: PageItem[];
 
   private toggleDrawer = (): void => {
     this.setState({ isOpen: !this.state.isOpen });
@@ -45,11 +55,11 @@ export default class Layout extends React.Component<IProps> {
         }}
       >
         <List>
-          {this.props.pages.map((item, index) => {
+          {this.pages.map((item, index) => {
             const { name, icon, href } = item;
             return (
               <ListItem
-                disabled={true}
+                disabled={false}
                 key={index}
                 disablePadding
                 selected={window.location.pathname.slice(1) === href}

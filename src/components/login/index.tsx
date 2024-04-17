@@ -20,100 +20,112 @@ export default class Login extends React.Component {
     this.setState(this.state);
   };
 
-  render() {
+  render(): JSX.Element {
     return (
       <Grid
-        container
         direction="row"
+        width={"100%"}
         justifyContent="center"
         alignItems="center"
-        height={"60vh"}
       >
-        <Box
-          sx={{
-            "& > :not(style)": { m: 1 },
-            border: "1px solid grey",
-            borderRadius: 2,
-          }}
-          component="form"
-          onSubmit={() => {
-            this.onSubmit();
-          }}
-          autoComplete={"false"}
+        <h2 className="title">Some User Info</h2>
+        <Grid
+          container
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+          height={"60vh"}
         >
-          <FormControl variant="standard" color="primary" autoCorrect={"false"}>
-            {appContext.auth?.getUser().id === null ? (
-              <Grid
-                container
-                spacing={3}
-                direction="column"
-                justifyContent="flex-end"
-                alignItems="center"
-              >
-                <Grid item xs={6}>
-                  <FormLabel>Please log in</FormLabel>
+          <Box
+            sx={{
+              "& > :not(style)": { m: 1 },
+              border: "1px solid grey",
+              borderRadius: 2,
+            }}
+            component="form"
+            onSubmit={() => {
+              this.onSubmit();
+            }}
+            autoComplete={"false"}
+          >
+            <FormControl
+              variant="standard"
+              color="primary"
+              autoCorrect={"false"}
+            >
+              {appContext.auth?.getUser().id === null ? (
+                <Grid
+                  container
+                  spacing={3}
+                  direction="column"
+                  justifyContent="flex-end"
+                  alignItems="center"
+                >
+                  <Grid item xs={6}>
+                    <FormLabel>Please log in</FormLabel>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      onChange={(e) => {
+                        this.setState({ [e.target.name]: e.target.value });
+                      }}
+                      type={"email"}
+                      required
+                      id="email"
+                      name={"email"}
+                      label="Email"
+                      placeholder={"email@mail.com"}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      onChange={(e) => {
+                        this.setState({ [e.target.name]: e.target.value });
+                      }}
+                      name={"password"}
+                      type={"password"}
+                      required
+                      id="password"
+                      label="Password"
+                      placeholder={"enter password"}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      style={{ width: 120 }}
+                      color={"success"}
+                      type={"submit"}
+                      required
+                      id="outlined-required"
+                      value="Log in"
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    onChange={(e) => {
-                      this.setState({ [e.target.name]: e.target.value });
-                    }}
-                    type={"email"}
-                    required
-                    id="email"
-                    name={"email"}
-                    label="Email"
-                    placeholder={"email@mail.com"}
-                  />
+              ) : (
+                <Grid
+                  container
+                  spacing={3}
+                  direction="column"
+                  justifyContent="flex-end"
+                  alignItems="center"
+                >
+                  <Grid item xs={12}>
+                    <TextField
+                      onClick={() => {
+                        appContext.auth?.signOut();
+                      }}
+                      value="Log Out"
+                      color={"success"}
+                      type={"submit"}
+                      required
+                      id="outlined-required"
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    onChange={(e) => {
-                      this.setState({ [e.target.name]: e.target.value });
-                    }}
-                    name={"password"}
-                    type={"password"}
-                    required
-                    id="password"
-                    label="Password"
-                    placeholder={"enter password"}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    style={{ width: 120 }}
-                    color={"success"}
-                    type={"submit"}
-                    required
-                    id="outlined-required"
-                    value="Log in"
-                  />
-                </Grid>
-              </Grid>
-            ) : (
-              <Grid
-                container
-                spacing={3}
-                direction="column"
-                justifyContent="flex-end"
-                alignItems="center"
-              >
-                <Grid item xs={12}>
-                  <TextField
-                    onClick={() => {
-                      appContext.auth?.signOut();
-                    }}
-                    value="Log Out"
-                    color={"success"}
-                    type={"submit"}
-                    required
-                    id="outlined-required"
-                  />
-                </Grid>
-              </Grid>
-            )}
-          </FormControl>
-        </Box>
+              )}
+            </FormControl>
+          </Box>
+        </Grid>
       </Grid>
     );
   }
