@@ -2,8 +2,9 @@ import Auth from "./index";
 
 type Data = {
   id: string | null;
-  type: string | null;
+  role: string | null;
   email: string | null;
+  token: string | null;
 };
 
 export default class User {
@@ -12,8 +13,9 @@ export default class User {
 
   private data: Data = {
     id: null,
-    type: null,
+    role: null,
     email: null,
+    token: null,
   };
 
   constructor(auth: Auth) {
@@ -28,13 +30,21 @@ export default class User {
     this.data.id = value;
     this.setUserToStorage();
   }
-
-  get type(): string | null {
-    return this.data.type;
+  get token(): string | null {
+    return this.data.token;
   }
 
-  set type(value) {
-    this.data.type = value;
+  set token(value) {
+    this.data.token = value;
+    this.setUserToStorage();
+  }
+
+  get role(): string | null {
+    return this.data.role;
+  }
+
+  set role(value) {
+    this.data.role = value;
     this.setUserToStorage();
   }
 
@@ -61,15 +71,19 @@ export default class User {
     }
     return false;
   }
+
   private setToStorage(key: string, data: string) {
     localStorage.setItem(key, data);
   }
+
   private setUserToStorage() {
     return this.setToStorage(this.userKey, JSON.stringify(this.data));
   }
+
   private getFromStorage(key: string): string {
     return <string>localStorage.getItem(key);
   }
+
   private getUserFromStorage(): string {
     return this.getFromStorage(this.userKey);
   }

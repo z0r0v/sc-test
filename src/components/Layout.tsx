@@ -18,26 +18,32 @@ import { PageItem } from "../App";
 import MenuIcon from "@mui/icons-material/Menu";
 import appContext from "../lib/AppContext";
 
-type State = {
-  isOpen: boolean;
-};
 
 interface IProps {
   pages: PageItem[];
 }
 
+type State = {
+  isOpen: boolean;
+  isLogin: boolean;
+};
+
 export default class Layout extends React.Component<IProps> {
   constructor(props: IProps) {
     super(props);
-    this.pages =
-      appContext.auth?.getUser().type === "ed"
-        ? this.props.pages
-        : this.props.pages.filter((item) => item.availability === true);
+    this.pages = appContext.auth?.isEditor()
+      ? this.props.pages
+      : this.props.pages.filter((item) => item.availability === true);
   }
 
   state: State = {
     isOpen: false,
+    isLogin: false,
   };
+
+  componentDidMount(): void {
+    this.setState({ isLogin: appContext.auth?.isLogin()});
+  }
 
   private pages: PageItem[];
 
@@ -58,7 +64,10 @@ export default class Layout extends React.Component<IProps> {
           {this.pages.map((item, index) => {
             const { name, icon, href } = item;
             return (
-              <ListItem
+              <ListItem onClick={(e)=>{
+                console.log(e);
+                  // e.preventDefault();
+              }}  
                 disabled={false}
                 key={index}
                 disablePadding
@@ -87,15 +96,18 @@ export default class Layout extends React.Component<IProps> {
   render(): JSX.Element {
     return (
       <Box>
-        {appContext.auth?.isLogin() ? (
-          <Container sx={{ border: "2px solid grey" }}>
-            <Grid
-              container
-              direction="row"
-              justifyContent="flex-end"
-              alignItems="center"
-            >
+          <Container>
+            {this.state.isLogin?(
+              <Grid display={"flex"} justifyContent="flex-end">
               <Button
+                size="large"
+                // TODO: move style to style componetn file
+                style={{
+                  position: 'absolute',
+                  right: 20,
+                  top: 20,
+                  border: "1px solid rgba(25, 118, 210, 0.5)",
+                }}
                 onClick={() => {
                   this.toggleDrawer();
                 }}
@@ -103,8 +115,8 @@ export default class Layout extends React.Component<IProps> {
                 <MenuIcon />
               </Button>
             </Grid>
+            ): null}
           </Container>
-        ) : null}
         <Container>
           <Drawer
             anchor={"right"}

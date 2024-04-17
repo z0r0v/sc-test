@@ -9,7 +9,6 @@ import UserList from "./components/pages/UserList/UserList";
 import AuditeLog from "./components/pages/AuditeLog/AuditeLog";
 import { Person } from "@mui/icons-material";
 import MailIcon from "@mui/icons-material/Mail";
-import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 import HomeRepairServiceIcon from "@mui/icons-material/HomeRepairService";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
@@ -66,8 +65,8 @@ export default class App extends React.Component<any, any> {
       availability: true,
     },
     {
-      name: appContext.auth?.isLogin() ? "Log Out" : "Login",
-      icon: appContext.auth?.isLogin() ? <LogoutIcon /> : <LoginIcon />,
+      name: 'Log Out',
+      icon: <LogoutIcon />,
       href: "/",
       component: <Login />,
       availability: true,
