@@ -131,7 +131,6 @@ table {
 .app {
   text-align: center;
 }
-.header {
-}
-.content {
+body {
+  padding-top: 100px;
 }

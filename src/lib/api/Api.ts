@@ -1,5 +1,6 @@
 import env from "react-dotenv";
 import axios from "axios";
+import appContext from "../AppContext";
 
 enum Paths {
   Auth = "/auth",
@@ -8,10 +9,15 @@ enum Paths {
 }
 
 export default class Api {
-  private request = (path: string, params: any): Promise<any> => {
+  private request = (
+    path: string,
+    params: any = null,
+    headers?: any,
+  ): Promise<any> => {
     try {
       const response = axios.get(path, {
         params: params,
+        headers: headers,
       });
       return response;
     } catch (error) {
@@ -20,12 +26,26 @@ export default class Api {
     }
   };
 
+  private getAutorisationHeader = (): { Authorization: string } => {
+    if (appContext.auth === null) {
+      throw new Error("zalupa");
+    }
+
+    return {
+      Authorization: "Bearer " + appContext.auth.getUser().token,
+    };
+  };
+
   public auth(params: { email: string; password: string }): Promise<any> {
     return this.request(env.APP_URL + Paths.Auth, params);
   }
 
-  public getUsers(params: any): Promise<any> {
-    return this.request(env.APP_URL + Paths.Users, params);
+  public getUsers(): Promise<any> {
+    return this.request(
+      env.APP_URL + Paths.Users,
+      null,
+      this.getAutorisationHeader(),
+    );
   }
 
   public getMessages(params: any): Promise<any> {

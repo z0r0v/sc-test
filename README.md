@@ -29,7 +29,3 @@
 ### Check files from eslint:
 
 `npx eslint src/**`
-
-### User login cred:
-
-`users.json`

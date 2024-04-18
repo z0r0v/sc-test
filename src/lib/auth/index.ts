@@ -1,39 +1,30 @@
 import User from "./User";
-// import usersJsonEnum from "../../users.json";
 import Api from "../api/Api";
 
 export default class Auth {
   private user: User = new User(this);
-
-  public async logIn(email: string, password: string) {
+  public async logIn(email: string, password: string): Promise<any> {
     await new Api()
       .auth({ email, password })
       .then((responce) => {
-        this.user.token = responce.data;
+        const {
+          data: { email, id, role, token },
+        } = responce;
+        this.user.email = email;
+        this.user.id = id;
+        this.user.role = role;
+        this.user.token = token;
+        return Promise.resolve(this.user);
       })
       .catch((error) => {
         console.debug("error:", error);
+        return Promise.reject(error);
       });
   }
 
   public signIn() {
     if (this.user.init()) {
       return;
-    }
-
-    if (!this.user.init()) {
-      // const usersEnum = Object.values(usersJsonEnum);
-      // const foundUser = usersEnum.find(
-      //   (item) => item.email === email && item.password === password,
-      // );
-      // if (foundUser) {
-      //   this.user.id = foundUser.id;
-      //   this.user.type = foundUser.type;
-      //   this.user.email = foundUser.email;
-      // }
-      // if (!foundUser) {
-      //   console.debug("User not found!");
-      // }
     }
   }
 

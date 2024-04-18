@@ -18,7 +18,6 @@ import { PageItem } from "../App";
 import MenuIcon from "@mui/icons-material/Menu";
 import appContext from "../lib/AppContext";
 
-
 interface IProps {
   pages: PageItem[];
 }
@@ -42,7 +41,7 @@ export default class Layout extends React.Component<IProps> {
   };
 
   componentDidMount(): void {
-    this.setState({ isLogin: appContext.auth?.isLogin()});
+    this.setState({ isLogin: appContext.auth?.isLogin() });
   }
 
   private pages: PageItem[];
@@ -64,10 +63,11 @@ export default class Layout extends React.Component<IProps> {
           {this.pages.map((item, index) => {
             const { name, icon, href } = item;
             return (
-              <ListItem onClick={(e)=>{
-                console.log(e);
+              <ListItem
+                onClick={(e) => {
+                  console.log(e);
                   // e.preventDefault();
-              }}  
+                }}
                 disabled={false}
                 key={index}
                 disablePadding
@@ -96,14 +96,14 @@ export default class Layout extends React.Component<IProps> {
   render(): JSX.Element {
     return (
       <Box>
-          <Container>
-            {this.state.isLogin?(
-              <Grid display={"flex"} justifyContent="flex-end">
+        <Container>
+          {this.state.isLogin ? (
+            <Grid display={"flex"} justifyContent="flex-end">
               <Button
                 size="large"
                 // TODO: move style to style componetn file
                 style={{
-                  position: 'absolute',
+                  position: "absolute",
                   right: 20,
                   top: 20,
                   border: "1px solid rgba(25, 118, 210, 0.5)",
@@ -115,8 +115,8 @@ export default class Layout extends React.Component<IProps> {
                 <MenuIcon />
               </Button>
             </Grid>
-            ): null}
-          </Container>
+          ) : null}
+        </Container>
         <Container>
           <Drawer
             anchor={"right"}

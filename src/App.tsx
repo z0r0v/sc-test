@@ -65,7 +65,7 @@ export default class App extends React.Component<any, any> {
       availability: true,
     },
     {
-      name: 'Log Out',
+      name: "Log Out",
       icon: <LogoutIcon />,
       href: "/",
       component: <Login />,

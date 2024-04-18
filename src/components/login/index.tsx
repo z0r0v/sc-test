@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, Grid, TextField } from "@mui/material";
+import { Box, Button, Grid, TextField, CircularProgress } from "@mui/material";
 import FormLabel from "@mui/material/FormLabel";
 import appContext from "../../lib/AppContext";
 import * as yup from "yup";
@@ -9,6 +9,7 @@ type InitialState = {
   email: string;
   password: string;
   isLogin: boolean;
+  loading: boolean;
 };
 
 export default class Login extends React.Component {
@@ -16,6 +17,7 @@ export default class Login extends React.Component {
     email: "",
     password: "",
     isLogin: false,
+    loading: false,
   };
 
   componentDidMount(): void {
@@ -23,12 +25,19 @@ export default class Login extends React.Component {
   }
 
   private onSubmit = (): void => {
-    appContext.auth?.logIn(this.state.email, this.state.password).then(() => {
-      this.setState({ isLogin: appContext.auth?.isLogin() });
-      window.location.reload();
-    });
-    // if (appContext.auth?.getUser().id === null) alert("User not found");
-    // this.setState(this.state);
+    this.setState({ loading: true });
+    appContext.auth
+      ?.logIn(this.state.email, this.state.password)
+      .then(() => {
+        this.setState({ isLogin: appContext.auth?.isLogin() });
+        this.setState({ loading: false });
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.debug(error);
+        alert("Check your login and password");
+        this.setState({ loading: false });
+      });
   };
 
   validationSchema = yup.object().shape({
@@ -49,6 +58,7 @@ export default class Login extends React.Component {
           <Box
             alignContent={"center"}
             sx={{
+              position: "relative",
               border: "1px solid rgba(25, 118, 210, 0.5)",
               borderRadius: 2,
               minWidth: 330,
@@ -146,6 +156,7 @@ export default class Login extends React.Component {
                   size="large"
                   variant="outlined"
                   onClick={() => {
+                    this.setState({ loading: true });
                     this.setState({ isLogin: appContext.auth?.isLogin() });
                     appContext.auth?.signOut();
                   }}
@@ -154,6 +165,22 @@ export default class Login extends React.Component {
                 </Button>
               </Grid>
             )}
+            {this.state.loading ? (
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: 0,
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <CircularProgress color="primary" />
+              </Box>
+            ) : null}
           </Box>
         </Grid>
       </Grid>
