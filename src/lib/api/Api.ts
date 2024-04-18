@@ -6,6 +6,8 @@ enum Paths {
   Auth = "/auth",
   Users = "/users",
   Messages = "/messages",
+  AuditLog = "/audit_log ",
+  Players = "/players ",
 }
 
 export default class Api {
@@ -49,13 +51,34 @@ export default class Api {
   }
 
   public getMessages(params: any): Promise<any> {
-    return this.request(env.APP_URL + Paths.Messages, params);
+    return this.request(
+      env.APP_URL + Paths.Messages,
+      params,
+      this.getAutorisationHeader(),
+    );
+  }
+
+  public getAuditLog(): Promise<any> {
+    return this.request(
+      env.APP_URL + Paths.AuditLog,
+      null,
+      this.getAutorisationHeader(),
+    );
+  }
+
+  public getPlayers(): Promise<any> {
+    return this.request(
+      env.APP_URL + Paths.Players,
+      null,
+      this.getAutorisationHeader(),
+    );
   }
 
   public sendMessages(params: { type: string; item_id: number }): Promise<any> {
     try {
       const response = axios.post(env.APP_URL + Paths.Messages, {
         params: params,
+        headers: this.getAutorisationHeader(),
       });
       return response;
     } catch (error) {
@@ -68,6 +91,7 @@ export default class Api {
     try {
       const response = axios.put(env.APP_URL + Paths.Messages, {
         params: params,
+        headers: this.getAutorisationHeader(),
       });
       return response;
     } catch (error) {
