@@ -1,18 +1,19 @@
 import { Outlet } from "react-router-dom";
 import React from "react";
 import {
+  AppBar,
   Box,
-  Button,
   Container,
   Divider,
   Drawer,
-  Grid,
+  IconButton,
   Link,
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Toolbar,
 } from "@mui/material";
 import { PageItem } from "../App";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -52,7 +53,7 @@ export default class Layout extends React.Component<IProps> {
 
   private DrawerList = (): JSX.Element => {
     return (
-      <Box
+      <Container
         sx={{ width: 250 }}
         role="presentation"
         onClick={() => {
@@ -64,10 +65,6 @@ export default class Layout extends React.Component<IProps> {
             const { name, icon, href } = item;
             return (
               <ListItem
-                onClick={(e) => {
-                  console.log(e);
-                  // e.preventDefault();
-                }}
                 disabled={false}
                 key={index}
                 disablePadding
@@ -89,37 +86,36 @@ export default class Layout extends React.Component<IProps> {
           })}
         </List>
         <Divider />
-      </Box>
+      </Container>
     );
   };
 
-  render(): JSX.Element {
+  render(): JSX.Element | null {
     return (
-      <Box>
-        <Container>
-          {this.state.isLogin ? (
-            <Grid display={"flex"} justifyContent="flex-end">
-              <Button
-                size="large"
-                // TODO: move style to style componetn file
-                style={{
-                  position: "absolute",
-                  right: 20,
-                  top: 20,
-                  border: "1px solid rgba(25, 118, 210, 0.5)",
-                }}
-                onClick={() => {
-                  this.toggleDrawer();
-                }}
-              >
-                <MenuIcon />
-              </Button>
-            </Grid>
-          ) : null}
-        </Container>
+      <Container>
+        {appContext.auth?.isLogin() ? (
+          <Box mb={5}>
+            <AppBar position="static">
+              <Toolbar>
+                <IconButton
+                  size="large"
+                  edge="start"
+                  color="inherit"
+                  aria-label="menu"
+                  sx={{ mr: 2 }}
+                  onClick={() => {
+                    this.toggleDrawer();
+                  }}
+                >
+                  <MenuIcon />
+                </IconButton>
+              </Toolbar>
+            </AppBar>
+          </Box>
+        ) : null}
         <Container>
           <Drawer
-            anchor={"right"}
+            anchor={"left"}
             open={this.state.isOpen}
             onClose={() => {
               this.toggleDrawer();
@@ -129,7 +125,7 @@ export default class Layout extends React.Component<IProps> {
           </Drawer>
           <Outlet />
         </Container>
-      </Box>
+      </Container>
     );
   }
 }

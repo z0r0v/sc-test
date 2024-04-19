@@ -7,7 +7,9 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import React from "react";
 import Api from "../../../lib/api/Api";
-import { Box, CircularProgress, Container } from "@mui/material";
+import { Container } from "@mui/material";
+import Preloader from "../../common/Preloader";
+import PageTitle from "../../common/PageTitle";
 
 type rowsItem = {
   created_at: string;
@@ -44,9 +46,14 @@ export default class UserList extends React.Component {
     new Api()
       .getAuditLog()
       .then((response) => {
-        console.log(response);
-        this.setState({ rows: response.data });
+        [].length;
+        if (Array.isArray(response.data)) {
+          this.setState({ rows: response.data });
+          this.setState({ loading: false });
+          return;
+        }
         this.setState({ loading: false });
+        alert("Have not data from serve");
       })
       .catch((error) => console.debug(error));
   }
@@ -56,7 +63,12 @@ export default class UserList extends React.Component {
     rows: [
       {
         created_at: "",
-        actioned_by: { email: "", id: 0, name: "", role: "" },
+        actioned_by: {
+          email: "",
+          id: 0,
+          name: "",
+          role: "",
+        },
         id: 0,
         message: {
           created_at: "",
@@ -83,10 +95,7 @@ export default class UserList extends React.Component {
   render() {
     return (
       <Container>
-        <Box>
-          <h1 style={{ padding: 50 }}>Audit Logs:</h1>
-        </Box>
-
+        <PageTitle text="Audit Logs:" />
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
@@ -132,25 +141,9 @@ export default class UserList extends React.Component {
                 </TableRow>
               ))}
             </TableBody>
-            {/* TODO: Move to componetn */}
-            {this.state.loading ? (
-              <Box
-                sx={{
-                  position: "absolute",
-                  top: 0,
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <CircularProgress color="primary" />
-              </Box>
-            ) : null}
           </Table>
         </TableContainer>
+        <Preloader loading={this.state.loading} />
       </Container>
     );
   }

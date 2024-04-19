@@ -5,6 +5,7 @@ type Data = {
   role: string | null;
   email: string | null;
   token: string | null;
+  name: string | null;
 };
 
 export default class User {
@@ -16,6 +17,7 @@ export default class User {
     role: null,
     email: null,
     token: null,
+    name: null,
   };
 
   constructor(auth: Auth) {
@@ -30,6 +32,16 @@ export default class User {
     this.data.id = value;
     this.setUserToStorage();
   }
+
+  get name(): string | null {
+    return this.data.name;
+  }
+
+  set name(value) {
+    this.data.name = value;
+    this.setUserToStorage();
+  }
+
   get token(): string | null {
     return this.data.token;
   }

@@ -6,8 +6,9 @@ enum Paths {
   Auth = "/auth",
   Users = "/users",
   Messages = "/messages",
-  AuditLog = "/audit_log ",
+  AuditLog = "/audit_log",
   Players = "/players ",
+  Items = "/items ",
 }
 
 export default class Api {
@@ -30,7 +31,7 @@ export default class Api {
 
   private getAutorisationHeader = (): { Authorization: string } => {
     if (appContext.auth === null) {
-      throw new Error("zalupa");
+      throw new Error("Error auth");
     }
 
     return {
@@ -74,9 +75,22 @@ export default class Api {
     );
   }
 
-  public sendMessages(params: { type: string; item_id: number }): Promise<any> {
+  public getItems(): Promise<any> {
+    return this.request(
+      env.APP_URL + Paths.Items,
+      null,
+      this.getAutorisationHeader(),
+    );
+  }
+
+  public sendMessages(params: {
+    type: string;
+    player_id: number;
+    item_id?: number;
+    message?: string;
+  }): Promise<any> {
     try {
-      const response = axios.post(env.APP_URL + Paths.Messages, {
+      const response = axios.post(env.APP_URL + Paths.Messages, null, {
         params: params,
         headers: this.getAutorisationHeader(),
       });
@@ -87,12 +101,19 @@ export default class Api {
     }
   }
 
-  public aproveMessages(params: { status: string }): Promise<any> {
+  public aproveMessages(
+    params: { status: string },
+    item_id: number,
+  ): Promise<any> {
     try {
-      const response = axios.put(env.APP_URL + Paths.Messages, {
-        params: params,
-        headers: this.getAutorisationHeader(),
-      });
+      const response = axios.put(
+        env.APP_URL + Paths.Messages + "/" + item_id,
+        null,
+        {
+          params: params,
+          headers: this.getAutorisationHeader(),
+        },
+      );
       return response;
     } catch (error) {
       console.debug("Api aproveMessages request error", error);

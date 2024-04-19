@@ -1,101 +1,168 @@
 import React from "react";
 import {
   Autocomplete,
-  Box,
   Button,
   Container,
-  Grid,
+  Stack,
   TextField,
 } from "@mui/material";
 import { Formik } from "formik";
-
 import * as yup from "yup";
+import Api from "../../../lib/api/Api";
+import Preloader from "../../common/Preloader";
+import PageTitle from "../../common/PageTitle";
+
+type Gamer = {
+  label: string;
+  id: number;
+};
+
+type Item = {
+  label: string;
+  id: number;
+};
+
+type InitialState = {
+  gamer: Gamer;
+  gamers: Gamer[];
+  item: Item;
+  items: Item[];
+  loading: boolean;
+};
 export default class SendItem extends React.Component {
-  state = {
-    gamer: { label: "", id: 0 },
-    item: null,
+  state: InitialState = {
+    gamer: { id: 0, label: "" },
+    gamers: [{ id: 0, label: "" }],
+    item: { id: 0, label: "" },
+    items: [{ id: 0, label: "" }],
+    loading: false,
   };
 
+  componentDidMount(): void {
+    this.setState({ loading: true });
+    new Api().getPlayers().then((responce) => {
+      const options = this.changePropertyNameToLabel(
+        responce.data,
+        "name",
+        "label",
+      );
+      this.setState({ gamers: options });
+      this.setState({ loading: false });
+    });
+
+    new Api().getItems().then((responce) => {
+      const options = this.changePropertyNameToLabel(
+        responce.data,
+        "name",
+        "label",
+      );
+      this.setState({ items: options });
+      this.setState({ loading: false });
+    });
+  }
+
+  private changePropertyNameToLabel = (
+    array: Array<any>,
+    oldPropName: string,
+    newPropName: string,
+  ) => {
+    return array.map((item) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { [oldPropName]: old, ...others } = item;
+      return { ...others, [newPropName]: item[oldPropName] };
+    });
+  };
+
+  private submitForm(): void {
+    new Api()
+      .sendMessages({
+        type: "item",
+        item_id: this.state.item.id,
+        player_id: this.state.gamer.id,
+      })
+      .then(() => {
+        alert("Item is sended");
+        window.location.reload();
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  }
+
   validationSchema = yup.object().shape({
-    gamers: yup.string().required().trim().min(5).max(220),
-    item: yup.string().required().trim().min(1).max(220),
+    // TODO: Add bether validation for gamers
+    gamer: yup.object(),
+    item: yup.object(),
   });
 
-  onSubmit = () => {};
-
-  render() {
+  render(): JSX.Element {
     return (
       <Container>
-        <Box>
-          <h1 style={{ padding: 50 }}>Items:</h1>
-        </Box>
+        <PageTitle text={"Items:"} />
         <Formik
           validationSchema={this.validationSchema}
           initialValues={{
             gamer: this.state.gamer,
             item: this.state.item,
           }}
-          onSubmit={() => this.onSubmit()}
+          onSubmit={() => this.submitForm()}
         >
-          {({ handleSubmit, values, setFieldValue }) => (
-            <Grid
-              container
-              xs={10}
-              justifyContent={"center"}
-              alignItems={"center"}
-              style={{
-                border: "1px solid rgba(25, 118, 210, 0.5)",
-                borderRadius: 2,
-                padding: 30,
-              }}
-            >
-              <Grid mb={2} item xs={7}>
-                <Autocomplete
-                  disablePortal
-                  id="gamer"
-                  value={this.state.gamer ?? ""}
-                  options={[
-                    { label: "The Godfather", id: 1 },
-                    { label: "Pulp Fiction", id: 2 },
-                  ]}
-                  sx={{ width: 300 }}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Select Gamer" />
-                  )}
-                />
-              </Grid>
-              <Grid mb={2} item xs={7}>
-                <Autocomplete
-                  disablePortal
-                  id="item"
-                  value={this.state.gamer ?? ""}
-                  options={[
-                    { label: "The Godfather", id: 1 },
-                    { label: "Pulp Fiction", id: 2 },
-                  ]}
-                  sx={{ width: 300 }}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Select Gamer" />
-                  )}
-                />
-              </Grid>
-              <Grid mb={2} item xs={7}>
-                <Button
-                  type="submit"
-                  size="large"
-                  variant="outlined"
-                  onClick={() => {
-                    console.log(values);
-                    console.log(setFieldValue);
-                    console.log(handleSubmit);
-                  }}
-                >
-                  Send Item
-                </Button>
-              </Grid>
-            </Grid>
+          {({ handleSubmit, values, setFieldValue, errors }) => (
+            <Stack spacing={2}>
+              {/* // TODO: Change color if unvalid */}
+              <Autocomplete
+                disablePortal
+                id="gamer"
+                value={values.gamer}
+                isOptionEqualToValue={(option, value) => option.id === value.id}
+                options={this.state.gamers}
+                getOptionLabel={(option) => option.label}
+                onChange={(e, newValue) => {
+                  setFieldValue("gamer", newValue);
+                  this.setState({ gamer: newValue });
+                }}
+                renderInput={(params) => (
+                  <TextField {...params} label="Select Gamer" />
+                )}
+              />
+              {/* // TODO: Change color if unvalid */}
+              <Autocomplete
+                disablePortal
+                id="item"
+                value={values.item}
+                isOptionEqualToValue={(option, value) => option.id === value.id}
+                options={this.state.items}
+                getOptionLabel={(option) => option.label}
+                onChange={(e, newValue) => {
+                  setFieldValue("item", newValue);
+                  this.setState({ item: newValue });
+                }}
+                renderInput={(params) => (
+                  <TextField {...params} label="Select Item" />
+                )}
+              />
+              <Button
+                type="submit"
+                size="large"
+                variant="outlined"
+                onClick={() => {
+                  if (errors.gamer) {
+                    alert(errors.gamer);
+                  }
+
+                  if (errors.item) {
+                    alert(errors.item);
+                  }
+
+                  handleSubmit();
+                }}
+              >
+                Send message
+              </Button>
+            </Stack>
           )}
         </Formik>
+        <Preloader loading={this.state.loading} />
       </Container>
     );
   }

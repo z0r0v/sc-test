@@ -1,5 +1,6 @@
 import React from "react";
-import "./App.css";
+import "./styles/App.css";
+import "./styles/Variables.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import SendMessage from "./components/pages/SendMessage/SendMessage";
@@ -13,10 +14,14 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import HomeRepairServiceIcon from "@mui/icons-material/HomeRepairService";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import ListAltIcon from "@mui/icons-material/ListAlt";
-import Box from "@mui/material/Box";
-import Login from "./components/login";
+import Login from "./components/pages/login";
 import Auth from "./lib/auth";
 import appContext from "./lib/AppContext";
+import { Container } from "@mui/material";
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
 
 export type PageItem = {
   name: string;
@@ -26,7 +31,13 @@ export type PageItem = {
   availability: boolean;
 };
 
-export default class App extends React.Component<any, any> {
+export default class App extends React.Component {
+  constructor(props: any) {
+    super(props);
+    appContext.auth = new Auth();
+    appContext.auth.signIn();
+  }
+
   // TODO: change lokation to new ts file
   pages: PageItem[] = [
     {
@@ -73,34 +84,26 @@ export default class App extends React.Component<any, any> {
     },
   ];
 
-  private constructor(props: any) {
-    super(props);
-    appContext.auth = new Auth();
-    appContext.auth.signIn();
-  }
-
   render() {
     return (
-      <div className="App">
-        <header className="App-header"></header>
-        <Box>
-          <BrowserRouter>
-            <Routes>
-              <Route
-                path={"/"}
-                element={<Layout pages={this.pages as PageItem[]} />}
-              >
-                {this.pages.map((page, index) => {
-                  const { href, component } = page;
-                  return (
-                    <Route path={href} key={index} index element={component} />
-                  );
-                })}
-              </Route>
-            </Routes>
-          </BrowserRouter>
-        </Box>
-      </div>
+      <Container disableGutters maxWidth={"xl"} className="App" sx={{ px: 0 }}>
+        {/* <header className="App-header"></header> */}
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path={"/"}
+              element={<Layout pages={this.pages as PageItem[]} />}
+            >
+              {this.pages.map((page, index) => {
+                const { href, component } = page;
+                return (
+                  <Route path={href} key={index} index element={component} />
+                );
+              })}
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </Container>
     );
   }
 }

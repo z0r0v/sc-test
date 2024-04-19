@@ -8,12 +8,13 @@ export default class Auth {
       .auth({ email, password })
       .then((responce) => {
         const {
-          data: { email, id, role, token },
+          data: { email, id, role, token, name },
         } = responce;
         this.user.email = email;
         this.user.id = id;
         this.user.role = role;
         this.user.token = token;
+        this.user.name = name;
         return Promise.resolve(this.user);
       })
       .catch((error) => {
