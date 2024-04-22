@@ -1,4 +1,4 @@
-export type RowsItem = {
+export type WaitingOperationData = {
   created_by: number;
   id: number;
   item_id: number | null;

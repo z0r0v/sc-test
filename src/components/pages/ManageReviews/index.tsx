@@ -23,14 +23,14 @@ import PageTitle from "../../common/PageTitle";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { Statuses } from "../../../lib/enums/Statuses";
-import { MessageTypes } from "../../../lib/enums/MessageTypes";
-import { RowsItem } from "../../../lib/types/ManageReviewsRowItem";
+import { Message } from "../../../lib/enums/Message";
+import { WaitingOperationData } from "../../../lib/types/WaitingOperationData";
 
 type InitialState = {
   loading: boolean;
-  rows: RowsItem[];
-  filterType: MessageTypes.Item | MessageTypes.Text;
-  initRow: RowsItem[];
+  rows: WaitingOperationData[];
+  filterType: Message.Item | Message.Text;
+  initRow: WaitingOperationData[];
 };
 
 export default class ManageReviews extends React.Component {
@@ -51,7 +51,7 @@ export default class ManageReviews extends React.Component {
       .catch((error) => console.debug(error));
   }
 
-  private initRowItem: RowsItem = {
+  private initRowItem: WaitingOperationData = {
     created_by: 0,
     id: 0,
     item_id: null,
@@ -67,7 +67,7 @@ export default class ManageReviews extends React.Component {
 
   state: InitialState = {
     loading: false,
-    filterType: MessageTypes.Item,
+    filterType: Message.Item,
     initRow: [this.initRowItem],
     rows: [this.initRowItem],
   };
@@ -85,8 +85,8 @@ export default class ManageReviews extends React.Component {
     });
   };
 
-  private changeStatusForMessage = (value: string, row: RowsItem): void => {
-    const changedRow: RowsItem[] = this.state.rows.map((item) => {
+  private changeStatusForMessage = (value: string, row: WaitingOperationData): void => {
+    const changedRow: WaitingOperationData[] = this.state.rows.map((item) => {
       if (item.id === row.id) {
         item.changed = true;
         item.status = value;
@@ -101,13 +101,13 @@ export default class ManageReviews extends React.Component {
   };
 
   private filterdRowsFromType = (
-    type: MessageTypes.Item | MessageTypes.Text,
+    type: Message.Item | Message.Text,
   ): void => {
     console.log(type);
     this.setState({ rows: this.state.initRow });
 
-    const filterdArray: RowsItem[] = this.state.initRow.filter(
-      (item: RowsItem) => item.type === type,
+    const filterdArray: WaitingOperationData[] = this.state.initRow.filter(
+      (item: WaitingOperationData) => item.type === type,
     );
 
     this.setState({ rows: filterdArray });
@@ -149,12 +149,12 @@ export default class ManageReviews extends React.Component {
                   onChange={(e, newValue) => {
                     localStorage.setItem(
                       this.storageItemKey,
-                      MessageTypes.Item,
+                      Message.Item,
                     );
-                    this.filterdRowsFromType(MessageTypes.Item);
+                    this.filterdRowsFromType(Message.Item);
                     this.setState({ filterType: newValue });
                   }}
-                  value={MessageTypes.Item}
+                  value={Message.Item}
                 >
                   Item
                 </ToggleButton>
@@ -162,12 +162,12 @@ export default class ManageReviews extends React.Component {
                   onChange={(e, newValue) => {
                     localStorage.setItem(
                       this.storageItemKey,
-                      MessageTypes.Text,
+                      Message.Text,
                     );
-                    this.filterdRowsFromType(MessageTypes.Text);
+                    this.filterdRowsFromType(Message.Text);
                     this.setState({ filterType: newValue });
                   }}
-                  value={MessageTypes.Text}
+                  value={Message.Text}
                 >
                   Text
                 </ToggleButton>

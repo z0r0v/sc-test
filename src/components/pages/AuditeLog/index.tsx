@@ -10,12 +10,12 @@ import Api from "../../../lib/api/Api";
 import { Container } from "@mui/material";
 import Preloader from "../../common/Preloader";
 import PageTitle from "../../common/PageTitle";
-import { RowsItemAuditLog } from "../../../lib/types/RowsItemAuditLog";
+import { OperationData } from "../../../lib/types/OperationData";
 import { Statuses } from "../../../lib/enums/Statuses";
 
 type InitialState = {
   loading: boolean;
-  rows: RowsItemAuditLog[];
+  rows: OperationData[];
 };
 
 export default class UserList extends React.Component {

@@ -1,4 +1,4 @@
-export type RowsItemAuditLog = {
+export type OperationData = {
   created_at: string;
   actioned_by: { email: string; id: number; name: string; role: string };
   id: number;
