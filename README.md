@@ -49,19 +49,19 @@ npx eslint src/**
 ### Users Credintals
 login's:
 ```
-Editor_1
+Editor_1@example.com
 ```
 ```
-Editor_2
+Editor_2@example.com
 ```
 ```
-User_1
+User_1@example.com
 ```
 ```
-User_2
+User_2@example.com
 ```
 ```
-User_3
+User_3@example.com
 ```
 password:
 ```
