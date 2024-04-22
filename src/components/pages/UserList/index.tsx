@@ -11,17 +11,11 @@ import { Container } from "@mui/material";
 import appContext from "../../../lib/AppContext";
 import Preloader from "../../common/Preloader";
 import PageTitle from "../../common/PageTitle";
-
-type rowsItem = {
-  id: string;
-  email: string;
-  name: string;
-  role: string;
-};
+import { UserData } from "../../../lib/types/UserData";
 
 type InitialState = {
   loading: boolean;
-  rows: rowsItem[];
+  rows: UserData[];
 };
 
 export default class UserList extends React.Component {
@@ -38,7 +32,7 @@ export default class UserList extends React.Component {
 
   state: InitialState = {
     loading: false,
-    rows: [{ id: "", email: "", name: "", role: "" }],
+    rows: [{ id: null, role: null, email: null, token: null, name: null }],
   };
 
   render(): JSX.Element {

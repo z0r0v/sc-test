@@ -1,18 +1,11 @@
+import { UserData } from "../types/UserData";
 import Auth from "./index";
-
-type Data = {
-  id: string | null;
-  role: string | null;
-  email: string | null;
-  token: string | null;
-  name: string | null;
-};
 
 export default class User {
   private auth: Auth;
   private readonly userKey: string = "User_Data";
 
-  private data: Data = {
+  private data: UserData = {
     id: null,
     role: null,
     email: null,
@@ -69,7 +62,7 @@ export default class User {
     this.setUserToStorage();
   }
 
-  public async setAllAttributes(user: Data) {
+  public async setAllAttributes(user: UserData) {
     this.data = user;
     this.setUserToStorage();
   }

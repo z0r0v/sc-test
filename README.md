@@ -45,3 +45,25 @@ npx prettier . --write
 ```
 npx eslint src/**
 ```
+
+### Users Credintals
+login's:
+```
+Editor_1
+```
+```
+Editor_2
+```
+```
+User_1
+```
+```
+User_2
+```
+```
+User_3
+```
+password:
+```
+123456
+```

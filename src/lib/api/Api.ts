@@ -1,16 +1,7 @@
 import env from "react-dotenv";
 import axios from "axios";
 import appContext from "../AppContext";
-
-enum Paths {
-  Auth = "/auth",
-  Users = "/users",
-  Messages = "/messages",
-  AuditLog = "/audit_log",
-  Players = "/players ",
-  Items = "/items ",
-}
-
+import { Paths } from "../enums/Paths";
 export default class Api {
   private request = (
     path: string,
@@ -51,10 +42,10 @@ export default class Api {
     );
   }
 
-  public getMessages(params: any): Promise<any> {
+  public getMessages(): Promise<any> {
     return this.request(
       env.APP_URL + Paths.Messages,
-      params,
+      {},
       this.getAutorisationHeader(),
     );
   }

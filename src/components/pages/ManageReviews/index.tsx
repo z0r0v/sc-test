@@ -22,46 +22,28 @@ import Preloader from "../../common/Preloader";
 import PageTitle from "../../common/PageTitle";
 import { Formik } from "formik";
 import * as yup from "yup";
-
-type rowsItem = {
-  created_by: number;
-  id: number;
-  item_id: number | null;
-  message: string | null;
-  player_id: number;
-  status: string;
-  type: string;
-  created_at: string;
-  changed: boolean | null;
-};
-
-enum Status {
-  Approved = "approved",
-  Rejected = "rejected",
-}
-
-enum Type {
-  Item = "item",
-  Text = "text",
-}
+import { Statuses } from "../../../lib/enums/Statuses";
+import { MessageTypes } from "../../../lib/enums/MessageTypes";
+import { RowsItem } from "../../../lib/types/ManageReviewsRowItem";
 
 type InitialState = {
   loading: boolean;
-  rows: rowsItem[];
-  filterType: Type.Item | Type.Text;
-  initRow: rowsItem[];
+  rows: RowsItem[];
+  filterType: MessageTypes.Item | MessageTypes.Text;
+  initRow: RowsItem[];
 };
 
 export default class ManageReviews extends React.Component {
-  validationSchema = yup.object().shape({
+  private validationSchema = yup.object().shape({
     rows: yup.array(),
   });
 
   componentDidMount(): void {
     this.setState({ loading: true });
     new Api()
-      .getMessages({})
+      .getMessages()
       .then((response) => {
+        console.log(response);
         this.setState({ initRow: response.data });
         this.setState({ rows: response.data });
         this.setState({ loading: false });
@@ -69,35 +51,25 @@ export default class ManageReviews extends React.Component {
       .catch((error) => console.debug(error));
   }
 
+  private initRowItem: RowsItem = {
+    created_by: 0,
+    id: 0,
+    item_id: null,
+    message: "",
+    player_id: 0,
+    status: "",
+    type: "",
+    created_at: "",
+    changed: false,
+  };
+
+  private storageItemKey: string = "filter_type";
+
   state: InitialState = {
     loading: false,
-    filterType: Type.Item,
-    initRow: [
-      {
-        created_by: 1,
-        id: 4,
-        item_id: null,
-        message: "",
-        player_id: 1,
-        status: "",
-        type: "",
-        created_at: "",
-        changed: false,
-      },
-    ],
-    rows: [
-      {
-        created_by: 1,
-        id: 4,
-        item_id: null,
-        message: "",
-        player_id: 1,
-        status: "",
-        type: "",
-        created_at: "",
-        changed: false,
-      },
-    ],
+    filterType: MessageTypes.Item,
+    initRow: [this.initRowItem],
+    rows: [this.initRowItem],
   };
 
   private onSubmit = (): void => {
@@ -113,8 +85,8 @@ export default class ManageReviews extends React.Component {
     });
   };
 
-  private changeStatusForMessage = (value: string, row: rowsItem): void => {
-    const changedRow: rowsItem[] = this.state.rows.map((item) => {
+  private changeStatusForMessage = (value: string, row: RowsItem): void => {
+    const changedRow: RowsItem[] = this.state.rows.map((item) => {
       if (item.id === row.id) {
         item.changed = true;
         item.status = value;
@@ -128,12 +100,14 @@ export default class ManageReviews extends React.Component {
     this.setState({ rows: changedRow });
   };
 
-  private filterdRowsFromType = (type: Type.Item | Type.Text): void => {
+  private filterdRowsFromType = (
+    type: MessageTypes.Item | MessageTypes.Text,
+  ): void => {
     console.log(type);
     this.setState({ rows: this.state.initRow });
 
-    const filterdArray: rowsItem[] = this.state.initRow.filter(
-      (item: rowsItem) => item.type === type,
+    const filterdArray: RowsItem[] = this.state.initRow.filter(
+      (item: RowsItem) => item.type === type,
     );
 
     this.setState({ rows: filterdArray });
@@ -173,21 +147,27 @@ export default class ManageReviews extends React.Component {
               >
                 <ToggleButton
                   onChange={(e, newValue) => {
-                    localStorage.setItem("FilterType", Type.Item);
-                    this.filterdRowsFromType(Type.Item);
+                    localStorage.setItem(
+                      this.storageItemKey,
+                      MessageTypes.Item,
+                    );
+                    this.filterdRowsFromType(MessageTypes.Item);
                     this.setState({ filterType: newValue });
                   }}
-                  value={Type.Item}
+                  value={MessageTypes.Item}
                 >
                   Item
                 </ToggleButton>
                 <ToggleButton
                   onChange={(e, newValue) => {
-                    localStorage.setItem("FilterType", Type.Text);
-                    this.filterdRowsFromType(Type.Text);
+                    localStorage.setItem(
+                      this.storageItemKey,
+                      MessageTypes.Text,
+                    );
+                    this.filterdRowsFromType(MessageTypes.Text);
                     this.setState({ filterType: newValue });
                   }}
-                  value={Type.Text}
+                  value={MessageTypes.Text}
                 >
                   Text
                 </ToggleButton>
@@ -216,6 +196,16 @@ export default class ManageReviews extends React.Component {
                       >
                         <TableCell align="center">
                           <Typography
+                            style={{
+                              color:
+                                row.status === Statuses.Approved
+                                  ? "green"
+                                  : row.status === Statuses.Rejected
+                                    ? "red"
+                                    : row.status === Statuses.Waiting
+                                      ? "gray"
+                                      : "",
+                            }}
                             variant="body2"
                             component="span"
                             color="Orange"
@@ -237,10 +227,10 @@ export default class ManageReviews extends React.Component {
                             name="radio-buttons-group"
                           >
                             <FormControlLabel
-                              value={Status.Approved}
+                              value={Statuses.Approved}
                               control={
                                 <Radio
-                                  value={Status.Approved}
+                                  value={Statuses.Approved}
                                   onChange={(e) => {
                                     setFieldValue("status", e.target.value);
                                     this.changeStatusForMessage(
@@ -253,10 +243,10 @@ export default class ManageReviews extends React.Component {
                               label="Aprove"
                             />
                             <FormControlLabel
-                              value={Status.Rejected}
+                              value={Statuses.Rejected}
                               control={
                                 <Radio
-                                  value={Status.Rejected}
+                                  value={Statuses.Rejected}
                                   onChange={(e) => {
                                     setFieldValue("status", e.target.value);
                                     this.changeStatusForMessage(
@@ -281,7 +271,7 @@ export default class ManageReviews extends React.Component {
                   variant="contained"
                   onClick={() => {
                     handleSubmit();
-                    console.log(errors);
+                    console.debug(errors);
                   }}
                 >
                   Send Changes

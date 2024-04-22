@@ -21,7 +21,7 @@ export default class Login extends React.Component {
     loading: false,
   };
 
-  validationSchema = yup.object().shape({
+  private validationSchema = yup.object().shape({
     email: yup.string().required().trim().min(5).max(20).email(),
     password: yup.string().required().trim().min(1).max(20),
   });
@@ -79,7 +79,6 @@ export default class Login extends React.Component {
                       Please logIn
                     </Typography>
                   </FormLabel>
-                  {/* // TODO: Change color if unvalid */}
                   <TextField
                     type="email"
                     name="email"
@@ -93,7 +92,6 @@ export default class Login extends React.Component {
                       this.setState({ email: e.target.value });
                     }}
                   />
-                  {/* // TODO: Change color if unvalid */}
                   <TextField
                     name={"password"}
                     type={"password"}

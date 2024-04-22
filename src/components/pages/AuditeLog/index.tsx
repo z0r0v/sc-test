@@ -10,34 +10,12 @@ import Api from "../../../lib/api/Api";
 import { Container } from "@mui/material";
 import Preloader from "../../common/Preloader";
 import PageTitle from "../../common/PageTitle";
-
-type rowsItem = {
-  created_at: string;
-  actioned_by: { email: string; id: number; name: string; role: string };
-  id: number;
-  message: {
-    created_at: string;
-    created_by: number;
-    id: number;
-    item: {
-      id: number;
-      name: string;
-    };
-    item_id: number;
-    message: string | null;
-    player: {
-      id: number;
-      name: string;
-    };
-    player_id: number;
-    status: string;
-    type: string;
-  };
-};
+import { RowsItemAuditLog } from "../../../lib/types/RowsItemAuditLog";
+import { Statuses } from "../../../lib/enums/Statuses";
 
 type InitialState = {
   loading: boolean;
-  rows: rowsItem[];
+  rows: RowsItemAuditLog[];
 };
 
 export default class UserList extends React.Component {
@@ -92,7 +70,7 @@ export default class UserList extends React.Component {
     ],
   };
 
-  render() {
+  render(): JSX.Element {
     return (
       <Container>
         <PageTitle text="Audit Logs:" />
@@ -119,7 +97,13 @@ export default class UserList extends React.Component {
                   <TableCell
                     style={{
                       color:
-                        row.message.status === "approved" ? "green" : "gray",
+                        row.message.status === Statuses.Approved
+                          ? "green"
+                          : row.message.status === Statuses.Rejected
+                            ? "red"
+                            : row.message.status === Statuses.Waiting
+                              ? "gray"
+                              : "",
                     }}
                     align="center"
                   >

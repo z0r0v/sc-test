@@ -1,8 +1,11 @@
 import User from "./User";
 import Api from "../api/Api";
+import { Roles } from "../enums/Roles";
 
 export default class Auth {
   private user: User = new User(this);
+  private storageItemKey: string = "user_data";
+
   public async logIn(email: string, password: string): Promise<any> {
     await new Api()
       .auth({ email, password })
@@ -34,11 +37,11 @@ export default class Auth {
   }
 
   public isEditor() {
-    return this.user.role === "editor";
+    return this.user.role === Roles.Editor;
   }
 
   public signOut(): void {
-    localStorage.removeItem("User_Data");
+    localStorage.removeItem(this.storageItemKey);
   }
 
   public getUser(): User {

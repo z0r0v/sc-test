@@ -15,9 +15,9 @@ import {
   ListItemText,
   Toolbar,
 } from "@mui/material";
-import { PageItem } from "../App";
 import MenuIcon from "@mui/icons-material/Menu";
 import appContext from "../lib/AppContext";
+import { PageItem } from "../lib/types/Page";
 
 interface IProps {
   pages: PageItem[];
