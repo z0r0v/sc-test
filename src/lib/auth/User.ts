@@ -1,9 +1,9 @@
+import { StorageData } from "../enums/StorageData";
 import { UserData } from "../types/UserData";
 import Auth from "./index";
 
 export default class User {
   private auth: Auth;
-  private readonly userKey: string = "User_Data";
 
   private data: UserData = {
     id: null,
@@ -82,7 +82,7 @@ export default class User {
   }
 
   private setUserToStorage() {
-    return this.setToStorage(this.userKey, JSON.stringify(this.data));
+    return this.setToStorage(StorageData.User, JSON.stringify(this.data));
   }
 
   private getFromStorage(key: string): string {
@@ -90,6 +90,6 @@ export default class User {
   }
 
   private getUserFromStorage(): string {
-    return this.getFromStorage(this.userKey);
+    return this.getFromStorage(StorageData.User);
   }
 }

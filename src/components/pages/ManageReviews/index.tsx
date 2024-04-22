@@ -25,6 +25,8 @@ import * as yup from "yup";
 import { Statuses } from "../../../lib/enums/Statuses";
 import { Message } from "../../../lib/enums/Message";
 import { WaitingOperationData } from "../../../lib/types/WaitingOperationData";
+import { StorageData } from "../../../lib/enums/StorageData";
+import Moment from 'moment';
 
 type InitialState = {
   loading: boolean;
@@ -146,7 +148,7 @@ export default class ManageReviews extends React.Component {
                 <ToggleButton
                   onChange={(e, newValue) => {
                     localStorage.setItem(
-                      this.storageItemKey,
+                      StorageData.Filter,
                       Message.Item,
                     );
                     this.filterdRowsFromType(Message.Item);
@@ -159,7 +161,7 @@ export default class ManageReviews extends React.Component {
                 <ToggleButton
                   onChange={(e, newValue) => {
                     localStorage.setItem(
-                      this.storageItemKey,
+                      StorageData.Filter,
                       Message.Text,
                     );
                     this.filterdRowsFromType(Message.Text);
@@ -218,7 +220,7 @@ export default class ManageReviews extends React.Component {
                           {row.item_id ? row.item_id : row.message}
                         </TableCell>
                         <TableCell align="center">{row.player_id}</TableCell>
-                        <TableCell align="center">{row.created_at}</TableCell>
+                        <TableCell align="center">{Moment(row.created_at).format("YYYY-MM-DD HH:mm")}</TableCell>
                         <TableCell align="center">
                           <RadioGroup
                             aria-labelledby="demo-radio-buttons-group-label"

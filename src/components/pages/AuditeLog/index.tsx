@@ -12,6 +12,7 @@ import Preloader from "../../common/Preloader";
 import PageTitle from "../../common/PageTitle";
 import { OperationData } from "../../../lib/types/OperationData";
 import { Statuses } from "../../../lib/enums/Statuses";
+import Moment from 'moment';
 
 type InitialState = {
   loading: boolean;
@@ -121,7 +122,7 @@ export default class UserList extends React.Component {
                   </TableCell>
                   <TableCell align="center">{row.actioned_by.name}</TableCell>
                   <TableCell align="center">{row.actioned_by.role}</TableCell>
-                  <TableCell align="center">{row.created_at}</TableCell>
+                  <TableCell align="center">{Moment(row.created_at).format("YYYY-MM-DD HH:mm")}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
