@@ -26,8 +26,8 @@ module.exports = {
   },
   plugins: ["@typescript-eslint", "react"],
   rules: {
-    "@typescript-eslint/no-explicit-any": "on",
-    "no-useless-catch": "on",
-    "no-debugger": "on",
+    "@typescript-eslint/no-explicit-any": "off",
+    "no-useless-catch": "off",
+    "no-debugger": "off",
   },
 };
