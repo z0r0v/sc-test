@@ -10,7 +10,7 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { PageItem } from "./lib/types/Page";
-import Pages from "./components/Pages";
+import Pages from "./components/pages/Pages";
 
 export default class App extends React.Component {
   constructor(props: any) {
