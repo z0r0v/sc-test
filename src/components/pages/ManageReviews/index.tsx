@@ -43,7 +43,6 @@ export default class ManageReviews extends React.Component {
     new Api()
       .getMessages()
       .then((response) => {
-        console.log(response);
         this.setState({ initRow: response.data });
         this.setState({ rows: response.data });
         this.setState({ loading: false });
@@ -103,7 +102,6 @@ export default class ManageReviews extends React.Component {
   private filterdRowsFromType = (
     type: Message.Item | Message.Text,
   ): void => {
-    console.log(type);
     this.setState({ rows: this.state.initRow });
 
     const filterdArray: WaitingOperationData[] = this.state.initRow.filter(
