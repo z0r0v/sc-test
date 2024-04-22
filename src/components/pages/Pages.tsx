@@ -10,7 +10,7 @@ import { Person } from "@mui/icons-material";
 import MailIcon from "@mui/icons-material/Mail";
 import AuditeLog from "./AuditeLog";
 import LogoutIcon from "@mui/icons-material/Logout";
-import Login from "./login";
+import Login from "./Login";
 import { PageItem } from "../../lib/types/Page";
 
 export default class Pages {
